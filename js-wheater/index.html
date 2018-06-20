@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Weather</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+
+    // fetch API results
+    const API_KEY = '886705b4c1182eb1c69f28eb8c520e20';
+    let jsonResult = null;
+    const WeatherRes = async () => {
+        let response = await fetch("https://api.openweathermap.org/data/2.5/weather?q=London&appid=" + API_KEY)
+        jsonResult = await response.json()
+        
+        // create HTML elements
+        let tagELem = document.createElement('h1')
+        let condTag = document.querySelector('.city-contitions')
+            let cityName = jsonResult.name
+            let nameNode = document.createTextNode(cityName)
+            tagELem.appendChild(nameNode)
+            condTag.appendChild(tagELem)
+
+        // find Conditions and create new element that contain that
+        let WeatherConditions = jsonResult.weather
+        Object.values(WeatherConditions[0]).forEach((item, index) => {
+            if(index === 2) {
+                let skyConditions = item
+                let h3 = document.createElement('h3')
+                let condNode = document.createTextNode(item)
+                h3.appendChild(condNode)
+                document.body.appendChild(h3)
+            }
+        })
+
+
+        let tempTag = document.querySelector('.temp')
+        let tempNode = document.createTextNode(jsonResult.main.temp)
+        tempTag.appendChild(tempNode)
+
+
+    
+    }
+    </script>
+</head>
+<body onLoad="WeatherRes()">
+    <div>
+        <h1>Meteo</h1>
+        <hr>
+    </div>
+    <div class='city-contitions'></div>
+    <br>
+    <div class='temp'>temp: </div>
+</body>
+</html>
